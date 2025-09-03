@@ -1,6 +1,5 @@
-import serverless from "serverless-http";
 import { createServer } from "../server";
 
-// Export a Vercel-compatible serverless function that wraps our Express app
-const handler = serverless(createServer());
-export default handler;
+// Export the Express app directly; Vercel will invoke it as a handler
+const app = createServer();
+export default app;
