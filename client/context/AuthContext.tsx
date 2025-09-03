@@ -22,7 +22,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }){
     if (t) {
       setToken(t);
       fetch("/api/auth/me", { headers: { Authorization: `Bearer ${t}` } })
-        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(async r => {
+          const text = await r.text();
+          let d: any = null; try { d = text ? JSON.parse(text) : null; } catch {}
+          if (!r.ok) throw new Error(d?.error || text || "Failed");
+          return d;
+        })
         .then(d => setUser(d.user))
         .finally(() => setLoading(false));
     } else {
@@ -32,13 +37,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }){
 
   const login = async (email: string, password: string) => {
     const r = await fetch("/api/auth/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, password }) });
-    const d = await r.json(); if (!r.ok) throw new Error(d.error || "Login failed");
+    const text = await r.text();
+    let d: any = null; try { d = text ? JSON.parse(text) : null; } catch {}
+    if (!r.ok) throw new Error(d?.error || text || "Login failed");
     localStorage.setItem("nexus_token", d.token); setToken(d.token); setUser(d.user);
   };
 
   const register = async (name: string, email: string, password: string) => {
     const r = await fetch("/api/auth/register", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, email, password }) });
-    const d = await r.json(); if (!r.ok) throw new Error(d.error || "Register failed");
+    const text = await r.text();
+    let d: any = null; try { d = text ? JSON.parse(text) : null; } catch {}
+    if (!r.ok) throw new Error(d?.error || text || "Register failed");
     localStorage.setItem("nexus_token", d.token); setToken(d.token); setUser(d.user);
   };
 
