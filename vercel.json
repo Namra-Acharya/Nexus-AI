@@ -5,6 +5,8 @@
   "outputDirectory": "dist/spa",
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/index.ts" },
+    { "src": "/assets/(.*)", "dest": "/assets/$1" },
+    { "src": "/(.*)\\.(js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|ico|json|txt|map)", "dest": "/$1.$2" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
