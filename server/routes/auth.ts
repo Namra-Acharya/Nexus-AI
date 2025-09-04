@@ -4,8 +4,11 @@ import jwt from "jsonwebtoken";
 import type { Request, Response } from "express";
 
 function sign(user: any){
-  const secret = process.env.JWT_SECRET;
-  if (!secret) throw new Error("JWT_SECRET not set");
+  let secret = process.env.JWT_SECRET;
+  if (!secret) {
+    console.warn('JWT_SECRET not set — using temporary dev secret. Set JWT_SECRET in production for security.');
+    secret = 'dev-secret';
+  }
   return jwt.sign({ id: String(user._id), email: user.email, name: user.name }, secret, { expiresIn: "30d" });
 }
 
