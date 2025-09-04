@@ -61,5 +61,10 @@ export function createServer() {
   app.post("/api/upload", authRequired, upload.single('file'), handleUpload);
   app.get("/api/files/:id", handleDownload);
 
+  // Health check for dev server and integrations
+  app.get("/health", (_req, res) => {
+    res.json({ status: "ok", uptime: process.uptime() });
+  });
+
   return app;
 }
