@@ -63,7 +63,7 @@ const generateFallbackResponse = (userMessage: string): string => {
 
 export const handleChat: RequestHandler = async (req, res) => {
   try {
-    const { messages }: ChatRequest = req.body;
+    const { messages }: ChatRequest = (req.body ?? {}) as ChatRequest;
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({
@@ -121,7 +121,7 @@ Never:
       }));
 
       // Prefer OpenRouter if configured
-      if (openrouterKey) {
+      if (openrouterKey && typeof fetch === 'function') {
         try {
           const orModel = process.env.OPENROUTER_MODEL || "mistralai/mistral-7b-instruct:free";
           const resp = await fetch("https://openrouter.ai/api/v1/chat/completions", {
