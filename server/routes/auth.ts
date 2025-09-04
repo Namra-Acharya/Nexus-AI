@@ -25,7 +25,7 @@ export async function register(req: Request, res: Response){
     const { insertedId } = await users.insertOne(doc);
     const token = sign({ _id: insertedId, email: doc.email, name: doc.name });
     res.json({ token, user: { id: insertedId, name: doc.name, email: doc.email } });
-  }catch(e:any){ res.status(500).json({ error: e.message }); }
+  }catch(e:any){ console.error('Auth API error:', e); res.status(500).json({ error: e.message || 'Internal Server Error' }); }
 }
 
 export async function login(req: Request, res: Response){
@@ -40,7 +40,7 @@ export async function login(req: Request, res: Response){
     if (!ok) return res.status(401).json({ error: "invalid credentials" });
     const token = sign(user);
     res.json({ token, user: { id: user._id, name: user.name, email: user.email } });
-  }catch(e:any){ res.status(500).json({ error: e.message }); }
+  }catch(e:any){ console.error('Auth API error:', e); res.status(500).json({ error: e.message || 'Internal Server Error' }); }
 }
 
 export async function me(req: Request, res: Response){
@@ -48,5 +48,5 @@ export async function me(req: Request, res: Response){
     const user = req.user;
     if (!user) return res.status(401).json({ error: "unauthorized" });
     res.json({ user });
-  }catch(e:any){ res.status(500).json({ error: e.message }); }
+  }catch(e:any){ console.error('Auth API error:', e); res.status(500).json({ error: e.message || 'Internal Server Error' }); }
 }

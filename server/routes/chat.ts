@@ -138,9 +138,9 @@ export const handleChat: RequestHandler = async (req, res) => {
     return res.json({ success: true, message: fallbackResponse });
 
   } catch (error) {
-    console.error('Unhandled error in /api/chat:', error);
+    console.error('Chat API error:', error);
     if (!res.headersSent) {
-      return res.status(500).json({ success: false, error: 'Internal server error' });
+      return res.status(500).json({ success: false, error: error?.message || 'Internal Server Error' });
     }
   }
 };
