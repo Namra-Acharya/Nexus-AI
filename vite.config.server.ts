@@ -32,6 +32,10 @@ export default defineConfig({
         // External dependencies that should not be bundled
         "express",
         "cors",
+        // Server-only libraries (avoid bundling/runtime resolution issues on platforms like Vercel)
+        "node-fetch",
+        "serverless-http",
+        "@mistralai/mistralai",
       ],
       output: {
         format: "es",
