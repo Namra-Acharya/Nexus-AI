@@ -5,7 +5,7 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 
 // Import route handlers and middleware directly to ensure bundler includes them
-import { handleDemo } from "../server/routes/demo";
+import { handleDemo } from "./demo";
 import { handleChat } from "../server/routes/chat";
 import { createGroup, joinGroup, listResources, addResource } from "../server/routes/groups";
 import { deleteResource } from "../server/routes/groups.delete";
